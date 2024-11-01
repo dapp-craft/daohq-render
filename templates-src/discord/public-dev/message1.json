@@ -1,0 +1,24 @@
+{
+    "message_id": 123,
+    "text": "",
+    "attachments": [],
+    "embeds": [
+        {
+            "author": {
+                "name": "theankou",
+                "url": "#",
+                "icon_url": "https://images-ext-1.discordapp.net/external/4GzzZ-jiSuyaFbLONZXJ_iv0Ayq_Qw6Md1Zw1pOv6pw/https/peer-ec1.decentraland.org/content/contents/bafkreidif7dqjflgvxug6zzmb7unlgz5ple3k74ecyhyydzgeoimc7rajy"
+            },
+            "title": "\\> Some _formatted **text** with 'code' samples_",
+            "type": "rich",
+            "description": "```Sure! Here is an example of formatted text with code samples:\n\n**Formatted Text with Code Samples**\n\n'''python\ndef greet(name):\n    print(\"Hello, \" + name + \"!\")\n    \ngreet(\"World\")\n'''\n\nThis will output:\n'''\nHello, World!\n'''```\n*:heart: Offered by Bots testing and powered by MEE6*",
+            "thumbnail_url": null,
+            "color": "#5bcef5",
+            "url": null
+        }
+    ],
+    "channel": "general",
+    "author": "MEE6",
+    "avatar_url": "https://cdn.discordapp.com/avatars/159985870458322944/b50adff099924dd5e6b72d13f77eb9d7.png?size=1024",
+    "date": "2024-07-21 15:05:57"
+}

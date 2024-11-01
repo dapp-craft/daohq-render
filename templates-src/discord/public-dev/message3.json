@@ -1,0 +1,10 @@
+{
+    "message_id": 123,
+    "text": "http://google.com\n```123\nhttp://google.com\n321```\nhello <h2>headre</h2> <script>alert('hacked')</script> ```<script>console.log('hacked')</script>```",
+    "attachments": [],
+    "embeds": [],
+    "channel": "general",
+    "author": "MEE6",
+    "avatar_url": "https://cdn.discordapp.com/avatars/159985870458322944/b50adff099924dd5e6b72d13f77eb9d7.png?size=1024",
+    "date": "2024-07-21 15:05:57"
+}

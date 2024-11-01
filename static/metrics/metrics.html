@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <title>DAO HQ Metrics</title>
+    <style>
+        :root {
+            --avatar-color-01: #4e79a7;
+            --avatar-color-23: #f28e2c;
+            --avatar-color-45: #e15759;
+            --avatar-color-67: #76b7b2;
+            --avatar-color-89: #59a14f;
+            --avatar-color-ab: #edc949;
+            --avatar-color-cd: #af7aa1;
+            --avatar-color-ef: #ff9da7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        body {
+            background-color: #1e1e1e;
+        }
+
+        .bubble {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #000;
+
+            background: white;
+            border: 2px solid #DADADA;
+            border-radius: 20px;
+            position: relative;
+
+            box-sizing: border-box;
+
+            font-family: 'Inter';
+            letter-spacing: -0.5px;
+        }
+
+        .bubble.error::after {
+            content: 'No data';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+
+            font-size: 24px;
+            font-weight: 400;
+            color: #fa2b54;
+            background: white;
+            left: 0;
+            top: 0;
+        }
+
+        .bubble h1 {
+            font-size: 12px;
+            font-weight: 400;
+            text-transform: uppercase;
+
+            color: rgb(28 28 28 / 70%);
+
+            padding-bottom: 8px;
+            border-bottom: 2px solid #fa2b54;
+
+            margin-bottom: 16px;
+        }
+
+        .bubble p {
+            margin-bottom: 8px;
+            color: rgba(28, 28, 28, 0.7);
+        }
+
+        .bubble .big {
+            font-size: 24px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 1);
+        }
+
+        #Participation,
+        #Proposals,
+        #Treasury,
+        #DaoVestingContract,
+        #GrantsProgramBudget {
+            width: 330px;
+            height: 160px;
+
+            padding: 32px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        #DaoVestingContract p.big {
+            text-wrap: nowrap;
+        }
+
+        #Balances {
+            width: 610px;
+            height: 400px;
+
+            padding: 32px;
+        }
+
+        #Balances h1 {
+            margin-bottom: 0;
+        }
+
+        #Balances table {
+            width: 100%;
+            border-spacing: 0 24px;
+        }
+
+        #Balances table img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            position: absolute;
+        }
+
+        #Balances table h2,
+        #Balances table p {
+            margin-left: 48px;
+            margin-bottom: 0;
+        }
+
+        #Balances table h2 {
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(28, 28, 28, 0.7);
+            text-transform: uppercase;
+            margin-bottom: 8px
+        }
+
+
+        #TopVoters {
+            width: 400px;
+            height: 632px;
+
+            padding: 12px 0px 0px 0;
+        }
+
+        #TopVoters table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        #TopVoters table th {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(28, 28, 28, 0.7);
+        }
+
+        #TopVoters td,
+        #TopVoters th {
+            padding-left: 24px;
+        }
+
+        #TopVoters tr {
+            border-bottom: 1px solid #DADADA5C;
+            height: 55px;
+        }
+
+        #TopVoters td.number {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(28, 28, 28, 0.7);
+        }
+
+        #TopVoters td.avatar {
+            width: 45px;
+            padding: 0;
+        }
+
+        #TopVoters td.avatar img {
+            width: 45px;
+            height: 45px;
+            vertical-align: middle;
+
+            background-color: #FFBF8C;
+            border-radius: 50%;
+        }
+
+        #TopVoters td.name {
+            max-width: 120px;
+            padding-left: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #TopVoters th.votes,
+        #TopVoters td.votes {
+            border-left: 1px solid #DADADA5C;
+            min-width: 50px;
+            padding-left: 12px;
+        }
+
+        #FundingProvided .growth {
+            height: 35px;
+        }
+
+
+        .green {
+            color: #5CA263FF;
+        }
+
+        .red {
+            color: #FA2B54FF;
+        }
+
+
+        .stats-listing {
+            width: 375px;
+            height: 380px;
+
+            padding: 32px 32px 0 32px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .stats-listing p {
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(28, 28, 28, 0.6);
+        }
+
+        .stats-listing .value {
+            color: #1c1c1c;
+        }
+
+        .stats-listing .value .big {
+            color: #FA2B54;
+        }
+
+        .stats-listing .growth .percent {
+            font-weight: 500;
+        }
+
+        .stats-listing p.growth::after {
+            content: " ";
+            border-bottom: 1px solid rgba(218, 218, 218, 0.36);
+            display: block;
+            margin: 8px 0 12px 0;
+            height: 0px;
+        }
+
+        .stats-listing .listing-row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .stats-listing .listing-row p {
+            margin: 0;
+            font-size: 12px;
+        }
+
+        .stats-listing .listing-row .amount {
+            font-weight: 500;
+            color: #1C1C1C;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+
+        <div id="Balances" class="metrics-output bubble">
+            <h1>Current Balance</h1>
+            <table>
+                <tr>
+                    <td>
+                        <img
+                            src='data:image/png;base64,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' />
+                        <h2>Mana Tokens</h2>
+                        <p id="balance-MANA" class="big">47,961,285.033</p>
+                    </td>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,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' />
+                            <h2>DAI Tokens</h2>
+                            <p id="balance-DAI" class="big">56,727.985</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,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' />
+                            <h2>USDC Tokens</h2>
+                            <p id="balance-USDC" class="big">3,195.653</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAoKSURBVHgB7ZsLUFTXGcf/595dQBQBMRiiSDRoKtoaNZPMJJkYRI0vYFmIjsZOJTZjFMRX0iZtZhJm2mna6UwSRaPNpCYzbTQa2YXEWGurtjGTtjqKjalvxQcYQF4iC8vuvaffWYtFXnv3srvAsr+ZO3vv7jl3z/7vd777P+fcBYIECRIkSBCdMOjEZClIoeq/RX+HgTMVv7CYcwqhA90Cplu2HKfvnoIAgHEcMTgPP7N74W4FHiJBB+nWgnmBIp6AMzxlN0yfAR3oElDieBUBhsSwATrwuAub92x6UpWkIwhAOFOeLjLlfelJHY8jkDP2EwQoTJVeg4d4FIHp1q1JjCvfInDhqqJMK87KO6G1gkcRKHHnmwhsGJPlPI8qaC1oKiwYT5n2W3AYEODIijphT9bqM1rKahdDotynUbwpsaNhlGX0JThtR29c1lTWaZDfoJfFWspqisDnijeNaVGkU1Q4XEv5jxe8iEEGI/oSTlWl37FVa/E6RVanfpa22q3imnKgQ5FytIoXIERJirxSS0G3Apr3bIujOF2BAQaNtFY8K367G9wKqEqO5ZRAhmDgMTSMOXPcFepWQJPl7SgqErDG2R0UhSuf2S406Bo3ERhKeYBHYKDC2LCooSGruyvSpYDPf7FxKN04uq08IJCwfC5p0fXHXdBol7M5uNskOgBICGuWl3f1YacCplk/EN3WbQLtCpWrtHGPN+3n5zo2FXqhlq1ZULytUxvX6chCUpvM1P/HQSdL934ATxHGWxhwLSzbtx0NLc3wGwwJsqqYaO/j9h91iMBpx7YZqcLPEOQeGOedTiJ3EHD0VUcmFR+PIO35frp1c1b7NzsIyJn0MoJ0isTZ6x3ea3uQUbjZTBJOQ5BOIVcy2Vy0cX7b9+6NQMZ033kHCqoqv9L2+O50ltm6OVnlOAgfECobMCxsMGLDIzAm8j7EDBqMIcZQGGjOUKImyNKd6/h43BhN5/vHjUs0PaVQXYnqMtgVBXXNNlTZGnCtoQbVzY34rvGWq4wvoJmxGcWZOYfE/l0bw1W+liIQPUWic4yJHI6k4XGIj4jB0JAwcPJhZbdrcbPpNiqbbuE/1eW43lALm7Plbr0wsjE7NNqYLScOkY2x3z2OoO+IGxKJyJBBeGBIFCYNH0nHUQiRZDQ4ml3fdaLyKkrrq+EN6HoLl/J/AdOsmx7lnC1AD5g6YjQeowgaS+KdqanAN1XXcfDKWTQ67PA1whM21HTuC8MNIZgcOwopCUkYFxWLy/U3cfS7UpSQoJ6Y93vgmJH+acHjRVm5/3QJKHFpDXQusj8SG48fTXzC9SN2nT2GrSV/Q19CRPnX5Zdcm+hfk6m95nFTkD3pCew8fRRflV+AxzDqaDLW094ime68E+hwK3Qssqc+NBnrHp2J0zU38Na/9rnyjl4M1N2yxmszAJbzJ9Ci6Mtvoo1/Lzvv6jGZD0+DjXrIudoKeA5LTFw05zOKOraekpSu5Df7wYmuV9EVxJpDf0Ghtt523Mm/MxImQCehsmR4kbwhT4VODpTeWWN/cmQi1k5LQdzgSPR1xE1m9dQZeHrUnaH+12U6uvD/oOHdUoNT5fOMEttL6fR+eEjxxZNoohwjusL0+IepUePxzc0yHKFGiTvelVvV1NWcms4lIvjL6+cRQpbHSN1ZWJvWpKxS1hZR46Ct2elw2RatiLv7SBItMToW06l93xt2P5kNRq6gDpZzx/HXq5qWfzvCeSUpuMjVdTOLCyYqCvsT7Y6CDsSd7pER8Xhq5DhaE453NVpQa7ehvKEOFbZbKCMrcZlErSWPJnzabco9XO9dsB0yCRJBFmawMcTlNROjR7hehbUR4kWF3pmJEuKfFO6ARDtVVXaPjfIEGpGUSwbDPEvqSyfv5r70XRuTmFEWIsajB4gF9aRhca4fMTZqOCbGPIDI0EEdyik0P1dNvrC6qZGimKLK6aTIcqCFzK+TPuMUba1ZVUQiI8MsM8kVnSJKQ2UjIsiMDw8fghgy6awTD1trb8SZ6gpcrKui3nATJRXXXOfuCXTRrzGnI826cF2JOL7nW+d/umWsUeIHxfwXvIgYiSRExiBhaAyiKRqEoNFh4RQxoa59MUoRIxOm0ciLyBU3AVc000UQFspGF6GeIl5cEJE6rlPk25ze9aB0q73gdLJn92atutT6XocWC1tDBb+g3QfhR8Kp+/1x/o81lRUTqvX2JvgTumhnuL0xpXjxT8vbvt/BPFvMOaeBlmS6yH59jI17OKXvX/hFORRz2osn6HT0Yc1YV0protMpW5ZggMPBztJtambh/NwrnX3e5fDNas6tlnjLPAqNASsi4+xosyonWzNWlnZVptvxb2Hmuhvk81Kow/wFAwzO2Fec2Wfvz1xxo7tybicQ9i9cX9PiUJbQ7mEMEBjUwnCbbKJUVueurKYZmH0L86rsoUo6uYy9CHS4WlgbNWnRjiUrbmoprvkJ1X3z8m5RRk01WQv+QNdoCQKTT6wZqxeLp4q0VvBsDpBObM3IfZ4mbzYjwCBn9H5dXeUyT8QT6JpErY+uWEszEb9GgECpaWN9dOWqw9n5Hj/uoEvAw8n5zh+crBLrAvno5zCOty2mnDXiN0EHugQU5Ofnq9aMnDcp9N9CP4VGP6/SyGs9eoBuAVspMue8RmPnXwLw9/hKNxyuOfhXisy5PU5DPRZQUGTKed21NNA/UBjYz6nNXvmzuFcEFFgzVr1Dw/z+8DT/Bmrrr+AlvCaggDzU7+glmzYb+hqMcZrFWU55+114Ea8KKKAGfsicyg9pV/8ap9fhNAjgLxSbc38PL+N1AQWW5/IKySeK7uz7xxLcU8+ZlCkuLHyATwQUWMy5O2lZYy56MxI5GsjnLSgyrfLZbFLPnyZyg3iGhMmgxSrW7R9WxJMJS5IegxY+OX2UFqDc+t5Klcnzi00vHYMP8bmAgsyi96Y4VcVK9mE0/AKtnHE11WLOOwkf4xcBBWlFmxMlBfvpG8fCl3BezYyGFLFmCz/gsxzYnuL0nAuKU51Ju6XwHaWK2jLdX+IJ/BaBrZh2FoxHqHSAQsW73ZnjlBTKF3S1+OMr/C6gILV40xjZyQ6QuX0I3uGcpDbNLsx82a/iCfzWhdsi/krP7SyZ8lWPuxrNBv2bs+aZvSGeoFcisBXxb3hVcn5Ou1Ohj+PGQfZZu+esr0Ev0asCCsSf+AxOh5W68yxP6nHwY+Gyce6ONG2LP76iV7pwWz5PW2EDG7yQ5uj+rL0WP8AweFZviyfodQEF1ozsupCo+zIZpCK3hTl2qTWNmaIO+gC93oXbsuzQ9rC6Otv7tLu08xLsI5rLW4Y+RJ+IwFY+TM5uplkTmgrjH7X/TAV7py6qQtvzb36kTwnYyuSSqhfEalnrscrx7pSSig16V84GLKai995ItxT8Bn0s1QQJEiRIkCBe4b8yN/oo5N8kuwAAAABJRU5ErkJggg==' />
+                            <h2>USDT Tokens</h2>
+                            <p id="balance-USDT" class="big">1,841.571</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,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' />
+                            <h2>Eth Tokens</h2>
+                            <p id="balance-ETH" class="big">341.561</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,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' />
+                            <h2>Matic Tokens</h2>
+                            <p id="balance-MATIC" class="big">82.843</p>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div>
+                            <img
+                                src='data:image/png;base64,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' />
+                            <h2>WETH Tokens</h2>
+                            <p id="balance-WETH" class="big">27.579</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="DaoVestingContract" class="metrics-output bubble">
+            <h1>DAO Vesting Contract</h1>
+            <p class="big"><span id="releasable-amount">$11,725,452</span> releasable</p>
+            <p><span id="vested-amount">$58,452,217</span> vested</p>
+        </div>
+
+        <div id="FundingProvided" class="metrics-output bubble stats-listing">
+            <h1>Funding Provided So Far</h1>
+            <p class="value"><span class="big" id="funding-provided-value">$14,207,283</span> USD</p>
+            <p class="growth">
+                <!-- <snap id="funding-provided-project-count" class="percent red">225</snap> <span>PROJECTS FUNDED</span> -->
+            </p>
+            <div class="listing-row template">
+                <p class="name">Accelerator</p>
+                <p class="amount">$250,000</p>
+            </div>
+        </div>
+
+        <div id="GrantsProgramBudget" class="metrics-output bubble">
+            <h1>Grants Program Budget, <span id="grants-budget-quarter">Q2</span></h1>
+            <p class="big"><span id="grants-budget-value">$1,455,531</span></p>
+            <p><span id="grants-budget-consumed-value">$311,230</span> consumed so far (<span
+                    id="grants-budget-consumed-percent">22%</span>)</p>
+        </div>
+
+        <div id="Last30dExpenses" class="metrics-output bubble stats-listing">
+            <h1>Last 30 Days Expenses</h1>
+            <p class="value"><span class="big" id="last-30-days-expenses">$396,036</span> USD</p>
+            <p class="growth">
+                <snap id="last-30-days-expenses-growth" class="percent red">-196%</snap> <span>VS PREVIOUS 30
+                    DAYS</span>
+            </p>
+            <div class="listing-row template">
+                <p class="name">Bids payout</p>
+                <p class="amount">$101,442</p>
+            </div>
+        </div>
+
+        <div id="Last30dIncome" class="metrics-output bubble stats-listing">
+            <h1>Last 30 Days Income</h1>
+            <p class="value"><span class="big" id="last-30-days-income">$12,447</span> USD</p>
+            <p class="growth">
+                <snap id="last-30-days-income-growth" class="percent green">-59%</snap> <span>VS PREVIOUS 30 DAYS</span>
+            </p>
+            <div class="listing-row template">
+                <p class="name">Names Minting Fees</p>
+                <p class="amount">$5,633</p>
+            </div>
+        </div>
+
+        <div id="Participation" class="metrics-output bubble">
+            <h1>Participation</h1>
+            <p class="big"><span id="participation-last-week">663</span> votes this week</p>
+            <p><span id="participation-last-month">1317</span> votes last 30 days</p>
+        </div>
+
+        <div id="Proposals" class="metrics-output bubble">
+            <h1>Proposals</h1>
+            <p class="big"><span id="active-proposals">9</span> active proposals</p>
+            <p><span id="ending-proposals">8</span> ending in next 48hs</p>
+        </div>
+
+        <div id="TopVoters" class="metrics-output bubble">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="3">LAST 30-DAYS TOP VOTERS</th>
+                        <th class="votes">VOTES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="number">1</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">2</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">3</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">4</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">5</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">6</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">7</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">8</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">9</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                    <tr>
+                        <td class="number">10</td>
+                        <td class="avatar"><img /></td>
+                        <td class="name">Tes User 123</td>
+                        <td class="votes">777</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="Treasury" class="metrics-output bubble">
+            <h1>Treasury</h1>
+            <p class="big"><span id="treasury-total">$23,173,945.05</span></p>
+            <p>Consolidated in USD</p>
+        </div>
+
+    </div>
+
+    <!-- common -->
+    <script>
+
+        const completeEventName = 'completelyFinished'
+        // @ts-ignore
+        window.completeEventName = completeEventName
+        document.addEventListener(completeEventName, () => console.log("DONE!"))
+
+
+        /**
+         * Gets from cache or fetches. Temporary for development.
+         * @template T
+         * @param {string} id
+         * @param {(url:str) => T} fetcher
+         * @returns {Promise<T>}
+         */
+        async function cachedFetch(id, fetcher) {
+            if (id in fetchCache)
+                return fetchCache[id]
+
+            const cached = localStorage.getItem(id)
+            if (cached)
+                return JSON.parse(cached)
+
+            const fetch = fetcher(id)
+            fetchCache[id] = fetch
+
+            const result = await fetch
+            localStorage.setItem(id, JSON.stringify(result))
+
+            delete fetchCache[id]
+            return result
+        }
+
+        /**
+         * @type { { [key: string]: Promise<any> } }
+         */
+        const fetchCache = {}
+
+        /**
+         * @template T, K
+         * @param {T[]} array
+         * @param {(item: T) => K} keySelector
+         * @return { {[key: K]: T[]} } // y no working? :(
+         */
+        function groupBy(array, keySelector) {
+            return array.reduce(function (accum, x) {
+                (accum[keySelector(x)] = accum[keySelector(x)] || []).push(x);
+                return accum;
+            }, {});
+        };
+
+        /**
+         * @template T, K, R
+         * @param {T[]} array
+         * @param {(item: T) => K} keySelector
+         * @param {(item: T) => R} valueSelector
+         * @return { {[key: K]: R[]} } // y no working? :(
+         */
+        function groupByAndMap(array, keySelector, valueSelector) {
+            return array.reduce(function (accum, x) {
+                (accum[keySelector(x)] = accum[keySelector(x)] || []).push(valueSelector(x));
+                return accum;
+            }, {});
+        };
+
+        /**
+         * @param {Element} el
+         * @param {{ name: string, amount: number }[]} data
+         */
+        function renderListing(el, data) {
+
+            const template = el.querySelector('.template')
+            const parent = template.parentElement
+
+            el.querySelectorAll('.template')
+                .forEach(el => el.remove())
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format
+
+            for (let i = 0; i < Math.min(7, data.length); i++) {
+                const source = data[i]
+                const row = template.cloneNode(true)
+                row.querySelector('.name').textContent = source.name
+                row.querySelector('.amount').textContent = formatMoney(source.value)
+                parent.append(row)
+            }
+
+            if (data.length == 8) {
+                const source = data[7]
+                const row = template.cloneNode(true)
+                row.querySelector('.name').textContent = source.name
+                row.querySelector('.amount').textContent = formatMoney(source.value)
+                parent.append(row)
+            }
+            else if (data.length > 8) {
+                const sum = data.slice(7).reduce((acc, el) => acc + el.value, 0)
+                const row = template.cloneNode(true)
+                row.querySelector('.name').textContent = "Other"
+                row.querySelector('.amount').textContent = formatMoney(sum)
+                parent.append(row)
+            }
+        }
+
+    </script>
+
+    <!-- data -->
+    <script>
+
+        async function renderBalance() {
+
+            /**
+             *  @type {{ 
+             *      ok:boolean,
+             *      balances: {
+             *          amount: number,
+             *          rate: number,
+             *          symbol: "MANA" | "ETH" | "WETH" | "DAI" | "USDC" | "USDC" | "MATIC"
+             *      }[]
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'data',
+                () =>
+                    fetch('https://data.decentraland.vote/api.json')
+                        .then(r => r.json())
+            )
+
+            const balancesBySymbol = groupBy(data.balances, (b) => b.symbol)
+            console.log(balancesBySymbol)
+
+            const formatTokens = new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 }).format
+
+            for (const symbol in balancesBySymbol) {
+                const sum = balancesBySymbol[symbol].reduce((acc, item) => acc + item.amount, 0)
+                document.querySelectorAll(`#balance-${symbol}`).forEach(el => el.textContent = formatTokens(sum))
+            }
+        }
+
+        async function renderCandidates() {
+
+            /**
+             *  @type { { address: string, }[] } 
+             */
+            const candidates = await
+                fetch('/static/candidates.json', {
+                }).then(r => r.json())
+
+            console.log(candidates)
+
+            /**
+             *  @type {{
+             *      ok: boolean,
+             *      data: { 
+             *          address: string,
+             *          pickedBy: number
+             *      }[]
+             *  }}
+             */
+            const pickedBy = await cachedFetch(
+                'picked-by',
+                () =>
+                    fetch('https://governance.decentraland.org/api/snapshot/picked-by', {
+                        method: "POST",
+                        headers: { 'Content-Type': "application/json" },
+                        body: JSON.stringify({ addresses: candidates.map(c => c.address) }),
+                    }).then(r => r.json())
+            )
+
+            console.log('picked by', pickedBy)
+
+            const ordered = pickedBy.data.sort((a, b) => b.pickedBy - a.pickedBy)
+            const top10 = []
+            for (let i = 0; i < Math.min(10, ordered.length); i++)
+                top10.push(ordered[i])
+
+            console.log('top10', top10)
+
+
+            /**
+             *  @type { {
+             *      ok: boolean,
+             *      data: { 
+             *          [address: string] : {
+             *              ownVp: number,
+             *              delegatedVp: number,
+             *              totalVp: number
+             *          }
+             *      } 
+             *  } } 
+             */
+            const scores = await cachedFetch(
+                'scores',
+                () =>
+                    fetch('https://governance.decentraland.org/api/snapshot/scores', {
+                        method: "POST",
+                        headers: { 'Content-Type': "application/json" },
+                        body: JSON.stringify({ addresses: candidates.map(c => c.address) }),
+                    }).then(r => r.json())
+            )
+
+            console.log('scores', scores)
+            return
+
+            /**
+             *  @type { unknown } 
+             */
+            const votes = await cachedFetch(
+                'votes',
+                () =>
+                    fetch('https://governance.decentraland.org/api/snapshot/votes', {
+                        method: "POST",
+                        headers: { 'Content-Type': "application/json" },
+                        body: JSON.stringify({ addresses: candidates.map(c => c.address) }),
+                    }).then(r => r.json())
+            )
+
+            console.log('votes', votes)
+        }
+
+        async function renderDaoVestingContract() {
+
+            /**
+             *  @type {{ ok:boolean, data: [ { released: number, releasable: number, total: number, token: string, vested: number } ] }} 
+             */
+            const data = await cachedFetch(
+                'vesting',
+                () =>
+                    fetch('https://governance.decentraland.org/api/vesting', {
+                        method: "POST",
+                        headers: { 'Content-Type': "application/json" },
+                        body: JSON.stringify({ addresses: ['0x7a3abf8897f31b56f09c6f69d074a393a905c1ac'] }),
+                    }).then(r => r.json())
+            )
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format
+
+            document
+                .querySelectorAll('#releasable-amount')
+                .forEach(el => el.textContent = formatMoney(data.data[0].releasable))
+
+            document
+                .querySelectorAll('#vested-amount')
+                .forEach(el => el.textContent = formatMoney(data.data[0].vested))
+        }
+
+        async function renderFundingProvided() {
+
+
+            /**
+             *  @type {{ 
+             *      ok:boolean,
+             *      funding: {
+             *          total: number
+             *      }
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'data',
+                () =>
+                    fetch('https://data.decentraland.vote/api.json')
+                        .then(r => r.json())
+            )
+
+            const total = data.funding.total
+
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format
+
+            document.querySelector('#funding-provided-value').textContent = formatMoney(total)
+
+
+            /**
+             * @typedef {{ total: number, allocated: number, available: number }} MoneyAllocation
+             */
+            /**
+             *  @type {{ 
+             *      ok:boolean,
+             *      data: {
+             *          id: string,
+             *          start_at: string,
+             *          total: number,
+             *          allocated: number,
+             *          categories: {
+             *              accelerator: MoneyAllocation,
+             *              documentation: MoneyAllocation,
+             *              platform: MoneyAllocation,
+             *              sponsorship: MoneyAllocation,
+             *              social_media_content: MoneyAllocation,
+             *              in_world_content: MoneyAllocation,
+             *              core_unit: MoneyAllocation,
+             *          }
+             *      }[]
+             *  }} 
+             */
+            const budgetData = await cachedFetch(
+                'budget',
+                () =>
+                    fetch('https://governance.decentraland.org/api/budget/all')
+                        .then(r => r.json())
+            )
+
+            console.log(budgetData)
+
+
+            /**
+             * @type {{[key: string]: number}}
+             */
+            const acc = {}
+            for (const quartal of budgetData.data) {
+                for (const categoryName in quartal.categories) {
+                    if (!(categoryName in acc))
+                        acc[categoryName] = 0
+
+                    /**
+                     * @type {MoneyAllocation}
+                     */
+                    const allocation = quartal.categories[categoryName]
+                    acc[categoryName] += allocation.allocated
+                }
+            }
+
+            const names = {
+                accelerator: 'Accelerator',
+                documentation: 'Documentation',
+                core_unit: 'Core Unit',
+                in_world_content: 'In-World Content',
+                platform: 'Platform',
+                social_media_content: 'Social Media Content',
+                sponsorship: 'Sponsorship',
+            }
+            const renderData = Object.entries(acc).map(([id, value]) => { return { name: names[id], value } })
+            renderData.sort((a, b) => a.name > b.name ? 1 : -1)
+
+
+
+            renderListing(document.querySelector('#FundingProvided'), renderData)
+        }
+
+        async function renderGrantsProgramBudget() {
+
+            /**
+             * @typedef {{ total: number, allocated: number, available: number }} MoneyAllocation
+             */
+            /**
+             *  @type {{ 
+             *      ok:boolean,
+             *      data: {
+             *          id: string,
+             *          start_at: string,
+             *          total: number,
+             *          allocated: number,
+             *          categories: {
+             *              accelerator: MoneyAllocation,
+             *              documentation: MoneyAllocation,
+             *              platform: MoneyAllocation,
+             *              sponsorship: MoneyAllocation,
+             *              social_media_content: MoneyAllocation,
+             *              in_world_content: MoneyAllocation,
+             *              core_unit: MoneyAllocation,
+             *          }
+             *      }[]
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'budget',
+                () =>
+                    fetch('https://governance.decentraland.org/api/budget/all')
+                        .then(r => r.json())
+            )
+
+            console.log(data)
+
+            const lastCategory = data.data.reduce((last, next) => next.start_at > last.start_at ? next : last, data.data[0])
+            const startDate = new Date(lastCategory.start_at)
+            const quarter = Math.floor((startDate.getMonth() + 3) / 3);
+
+            console.log(lastCategory, `Q${quarter}`)
+
+            let total = 0
+            let allocated = 0
+            for (const category in lastCategory.categories) {
+                /**
+                 * @type {MoneyAllocation}
+                 */
+                const item = lastCategory.categories[category]
+                total += item.total
+                allocated += item.allocated
+            }
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format
+            const formatPercent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 }).format
+            document.querySelector('#grants-budget-quarter').textContent = `Q${quarter}`
+            document.querySelector('#grants-budget-value').textContent = formatMoney(total)
+            document.querySelector('#grants-budget-consumed-value').textContent = formatMoney(allocated)
+            document.querySelector('#grants-budget-consumed-percent').textContent = formatPercent(allocated / total)
+        }
+
+        async function renderLast30dExpenses() {
+
+            /**
+             *  @type {{
+             *      ok:boolean,
+             *      expenses: {
+             *          total: number,
+             *          previous: number,
+             *          details: {
+             *              name: string,
+             *              description: string,
+             *              value: number,
+             *          }[]
+             *      },
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'data',
+                () =>
+                    fetch('https://data.decentraland.vote/api.json')
+                        .then(r => r.json())
+            )
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format
+            const formatPercent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 }).format
+
+            document.querySelector('#last-30-days-expenses').textContent = formatMoney(data.expenses.total)
+            document.querySelector('#last-30-days-expenses-growth').textContent = formatPercent(data.expenses.previous / 100)
+            document.querySelector('#last-30-days-expenses-growth').classList.remove('green', 'red')
+            document.querySelector('#last-30-days-expenses-growth').classList.add(data.expenses.previous < 0 ? 'green' : 'red')
+
+            renderListing(document.querySelector('#Last30dExpenses'), data.expenses.details)
+        }
+
+        async function renderLast30dIncome() {
+
+            /**
+             *  @type {{
+             *      ok:boolean,
+             *      income: {
+             *          total: number,
+             *          previous: number,
+             *          details: {
+             *              name: string,
+             *              description: string,
+             *              value: number,
+             *          }[]
+             *      },
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'data',
+                () =>
+                    fetch('https://data.decentraland.vote/api.json')
+                        .then(r => r.json())
+            )
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format
+            const formatPercent = new Intl.NumberFormat("en-US", { style: "percent", maximumFractionDigits: 0 }).format
+
+            document.querySelector('#last-30-days-income').textContent = formatMoney(data.income.total)
+            document.querySelector('#last-30-days-income-growth').textContent = formatPercent(data.income.previous / 100)
+            document.querySelector('#last-30-days-income-growth').classList.remove('green', 'red')
+            document.querySelector('#last-30-days-income-growth').classList.add(data.income.previous > 0 ? 'green' : 'red')
+
+            renderListing(document.querySelector('#Last30dIncome'), data.income.details)
+        }
+
+        async function renderParticipation() {
+
+            const participation = await cachedFetch(
+                'participation',
+                url => fetch('https://governance.decentraland.org/api/votes/participation').then(r => r.json())
+            )
+
+            document
+                .querySelectorAll('#participation-last-week')
+                .forEach(el => el.textContent = participation.data.lastWeek)
+
+            document
+                .querySelectorAll('#participation-last-month')
+                .forEach(el => el.textContent = participation.data.last30Days)
+        }
+
+        async function renderProposals() {
+
+            /**
+             * @type {{ ok:boolean, total: number, data: unknown[]}}
+             */
+            const activeProposals = await cachedFetch(
+                'active-proposals',
+                () =>
+                    fetch('https://governance.decentraland.org/api/proposals?status=active')
+                        .then(r => r.json())
+            )
+
+            /**
+             * @type {{ ok:boolean, total: number, data: unknown[] }}
+             */
+            const endingProposals = await cachedFetch(
+                'ending-proposals',
+                () =>
+                    fetch('https://governance.decentraland.org/api/proposals?status=active&timeFrame=2days&timeFrameKey=finish_at')
+                        .then(r => r.json())
+            )
+
+            document
+                .querySelectorAll('#active-proposals')
+                .forEach(el => el.textContent = activeProposals.total)
+
+            document
+                .querySelectorAll('#ending-proposals')
+                .forEach(el => el.textContent = endingProposals.total)
+        }
+
+        async function renderTopVoters() {
+
+            /**
+             * @type {{ ok: boolean, data: [{ address: string, lastVoted: number, votes: number }] }}
+             */
+            const topVoters = await cachedFetch(
+                'top-voters',
+                () =>
+                    fetch('https://governance.decentraland.org/api/votes/top-voters')
+                        .then(r => r.json())
+            )
+
+            const datas = await Promise.all(
+                topVoters.data.map(async v => {
+                    /**
+                     * @type {{
+                     *  timestamp: number,
+                     *  avatars:  unknown & {
+                     *      name: string,
+                     *      avatar: unknown & {
+                     *          snapshots: unknown & {
+                     *              face256: string
+                     *          }
+                     *      }
+                     *  }[]
+                     * }}
+                     */
+                    const userProfile = await fetch(`https://peer.decentraland.org/lambdas/profile/${v.address}`)
+                        .then(r => r.json())
+
+                    console.log(userProfile)
+
+                    const ch = v.address[2]
+                    const n = Math.floor(parseInt(ch, 16) / 2) * 2
+                    const color = `${n.toString(16)}${(n + 1).toString(16)}`
+
+                    return {
+                        profile: userProfile.avatars.length > 0
+                            ? {
+                                name: userProfile.avatars[0].name,
+                                avatar: userProfile.avatars[0].avatar?.snapshots?.face256,
+                                color,
+                            } : {
+                                name: `${v.address.slice(0, 6)}...${v.address.slice(-4)}`,
+                                avatar: "https://decentraland.org/images/male.png",
+                                color,
+                            },
+                        stats: v
+                    }
+                }))
+
+            console.log(datas)
+
+            document.querySelectorAll('#TopVoters tbody tr')
+                .forEach((row, index) => {
+                    const data = datas[index]
+                    if (data) {
+                        row.querySelector('.number').textContent = index + 1
+                        row.querySelector('.avatar').innerHTML = `<img src='${data.profile.avatar}' style='background-color: var(--avatar-color-${data.profile.color})' />`
+                        row.querySelector('.name').textContent = data.profile.name
+                        row.querySelector('.votes').textContent = data.stats.votes
+                    } else {
+                        row.remove()
+                    }
+                })
+        }
+
+        async function renderTreasury() {
+
+            /**
+             *  @type {{ 
+             *      ok:boolean,
+             *      balances: {
+             *          amount: number,
+             *          rate: number,
+             *          symbol: "MANA" | "ETH" | "WETH" | "DAI" | "USDC" | "USDC" | "MATIC"
+             *      }[]
+             *  }} 
+             */
+            const data = await cachedFetch(
+                'data',
+                () =>
+                    fetch('https://data.decentraland.vote/api.json')
+                        .then(r => r.json())
+            )
+
+            const total = data.balances
+                .map(b => b.amount * b.rate)
+                .reduce((sum, val) => sum + val, 0)
+
+            const formatMoney = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format
+
+            document
+                .querySelectorAll('#treasury-total')
+                .forEach(el => el.textContent = formatMoney(total))
+        }
+
+    </script>
+
+    <!-- init -->
+    <script>
+
+        /**
+         * @param {string} id
+         * @return {(error: any) => void}
+         */
+        function makeError(id) {
+            return (er) => {
+                document.getElementById(id).classList.add('error')
+                console.error(er)
+                throw er
+            }
+        }
+
+        // Call the function to create divs when the page loads
+        window.onload = () => {
+            Promise.allSettled([
+                renderBalance().catch(makeError('Balances')),
+                renderDaoVestingContract().catch(makeError('DaoVestingContract')),
+                renderFundingProvided().catch(makeError('FundingProvided')),
+                renderGrantsProgramBudget().catch(makeError('GrantsProgramBudget')),
+                renderLast30dExpenses().catch(makeError('Last30dExpenses')),
+                renderLast30dIncome().catch(makeError('Last30dIncome')),
+                renderParticipation().catch(makeError('Participation')),
+                renderProposals().catch(makeError('Proposals')),
+                renderTopVoters().catch(makeError('TopVoters')),
+                renderTreasury().catch(makeError('Treasury')),
+            ])
+                .then(() => {
+                    // @ts-ignore
+                    window[completeEventName] = true
+                    document.dispatchEvent(new CustomEvent(completeEventName, { bubbles: true }))
+                })
+                .catch(() => {
+                    // @ts-ignore
+                    window[completeEventName] = true
+                    document.dispatchEvent(new CustomEvent(completeEventName, { bubbles: true }))
+                })
+        };
+    </script>
+</body>
+
+</html>

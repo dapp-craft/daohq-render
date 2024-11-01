@@ -1,0 +1,49 @@
+<div class="discord">
+    <img class="avatar" src="{{ msg.avatar_url }}" />
+    <div class="message">
+        <div class="author">
+            <span class="author-name">{{ msg.author }}</span> <span class="date">{{ msg.date }} (UTC+0)</span>
+        </div>
+
+        <div class="text">{{{ msg.formatted_text }}}</div>
+
+        {{#each msg.attachments}}
+        <p><img src="{{ this }}"></p>
+        {{/each}}
+
+        {{#each msg.embeds}}
+        <div class="embed">
+            {{#if color}}
+            <div class="color" style="background-color: {{ color }};"></div>
+            {{else}}
+            <div class="color" style="background-color: lightgray;"></div>
+            {{/if}}
+            {{#if author}}
+            <div class="author">
+                {{#if author.icon_url}}
+                <img class="avatar" src="{{author.icon_url}}" />
+                {{/if}}
+                <span>{{ author.name }}</span>
+            </div>
+            {{/if}}
+            <h2>
+                {{#if formatted_title}}
+                {{{ formatted_title }}}
+                {{else}}
+                {{ title }}
+                {{/if}}
+            </h2>
+            <p>
+                {{#if formatted_description}}
+                {{{ formatted_description }}}
+                {{else}}
+                {{ description }}
+                {{/if}}
+            </p>
+            {{#if thumbnail_url}}
+            <img src="{{ thumbnail_url }}">
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+</div>
